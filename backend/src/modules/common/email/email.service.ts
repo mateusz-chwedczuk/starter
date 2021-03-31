@@ -30,6 +30,8 @@ export class EmailService {
     htmlBody?: string,
     attachments?: Transporter['options']['attachments'],
   ): Promise<void> {
+    if (Array.isArray(mailTo) && mailTo.length === 0) return;
+
     if (['test', 'development'].includes(process.env.NODE_ENV)) {
       console.log('Sending mail');
       console.log('To:', mailTo);
@@ -39,8 +41,6 @@ export class EmailService {
       if (attachments) console.log('Attachments count:', attachments.length);
       return;
     }
-
-    if (Array.isArray(mailTo) && mailTo.length === 0) return;
 
     try {
       await this.transporter.sendMail({

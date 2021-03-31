@@ -1,0 +1,62 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  email: String!
+}
+
+type Query {
+  users: [User!]!
+}
+
+type Mutation {
+  login(input: LoginInput!): LoginResponse!
+  refresh: RefreshResponse!
+  register(input: RegisterInput!): RegisterResponse!
+}
+
+union LoginResponse = LoginOkResponse | LoginInvalidResponse
+
+type LoginOkResponse {
+  className: String!
+  token: String!
+  expiresIn: Int!
+}
+
+type LoginInvalidResponse {
+  className: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+union RefreshResponse = RefreshOkResponse | RefreshInvalidResponse
+
+type RefreshOkResponse {
+  className: String!
+  token: String!
+  expiresIn: Int!
+}
+
+type RefreshInvalidResponse {
+  className: String!
+}
+
+union RegisterResponse = RegisterOkResponse | RegisterEmailTakenResponse
+
+type RegisterOkResponse {
+  className: String!
+}
+
+type RegisterEmailTakenResponse {
+  className: String!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+}
