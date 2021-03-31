@@ -1,0 +1,42 @@
+version: "3.8"
+
+networks:
+  starter-network:
+    name: starter-network
+
+services:
+  backend:
+    container_name: starter-backend
+    image: "node:lts-alpine"
+    command: sh -c "yarn install && yarn start:dev"
+    restart: on-failure
+    volumes:
+      - "./backend/package.json:/usr/app/package.json"
+      - "./backend/yarn.lock:/usr/app/yarn.lock"
+      - "./backend/tsconfig.json:/usr/app/tsconfig.json"
+      - "./backend/tsconfig.build.json:/usr/app/tsconfig.build.json"
+      - "./backend/src:/usr/app/src"
+      - "./backend/assets:/usr/app/assets"
+      - "backend_node_modules:/usr/app/node_modules"
+    working_dir: /usr/app
+    ports:
+      - "${SERVER_PORT:-4000}:4000"
+      - "${DEBUGGER_PORT:-9229}:9229"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - starter-network
+
+  db:
+    container_name: starter-db
+    image: mongo
+    restart: on-failure
+    networks:
+      - starter-network
+    ports:
+      - "${DB_PORT:-5000}:5000"
+
+volumes:
+  backend_node_modules:
